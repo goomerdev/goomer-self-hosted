@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "nocodb/nocodb:0.262.2",
+    "Name": "nocodb/nocodb:0.263.3",
     "Update": "true"
   },
   
