@@ -1,0 +1,49 @@
+name: Deploy NocoDB to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+    - master
+    - develop
+    paths:
+    - './nocodb/**'
+    - '.github/workflows/deploy-aws-eb.yml'
+
+env:
+  ENV_NAME: ${{ github.ref == 'refs/heads/master' && 'prod' || github.ref == 'refs/heads/develop' && 'ninja' }}
+  AWS_REGION: us-east-2
+  EB_APP_NAME: nocodb
+  EB_ENV_NAME: ${{ ENV_NAME }}-nocodb
+
+permissions:
+  id-token: write
+  contents: read  
+
+jobs:
+  deploy-nocodb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout NocoDB code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::770893956717:role/github-deploy
+          role-session-name: github-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS Elastic Beanstalk CLI
+        run: pip install awsebcli
+
+      - name: Gerar zip do Dockerrun.aws.json do NocoDB
+        run: |
+          zip -r deploy.zip Dockerrun.aws.json
+
+      - name: Deploy to ${{ env.ENV_NAME }} environment
+        run: eb deploy ${{ env.ENV_NAME }}-${{ env.EB_APP_NAME }}          
