@@ -1,0 +1,5 @@
+# Arquivos de ambiente com informações sensíveis
+.env
+
+# Diretórios de dados do n8n
+.n8n/
