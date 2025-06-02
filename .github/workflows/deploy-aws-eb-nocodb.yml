@@ -42,6 +42,7 @@ jobs:
 
       - name: Gerar zip do Dockerrun.aws.json do NocoDB
         run: |
+          cd nocodb
           zip -r deploy.zip Dockerrun.aws.json
 
       - name: Deploy to ${{ env.ENV_NAME }} environment
