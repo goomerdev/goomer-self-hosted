@@ -46,4 +46,6 @@ jobs:
           zip -r deploy.zip Dockerrun.aws.json
 
       - name: Deploy to ${{ env.ENV_NAME }} environment
-        run: eb deploy ${{ env.ENV_NAME }}-${{ env.EB_APP_NAME }}          
+        run: |
+          cd nocodb
+          eb deploy ${{ env.ENV_NAME }}-${{ env.EB_APP_NAME }}          
