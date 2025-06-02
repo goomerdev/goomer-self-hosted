@@ -6,8 +6,8 @@ on:
     - main
     - develop
     paths:
-    - './nocodb/**'
-    - '.github/workflows/deploy-aws-eb.yml'
+    - 'nocodb/**'
+    - '.github/workflows/deploy-aws-eb-nocodb.yml'
 
 env:
   ENV_NAME: ${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/develop' && 'ninja' }}
