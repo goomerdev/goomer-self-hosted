@@ -1,0 +1,51 @@
+name: Deploy Metabase to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+    - main
+    - develop
+    paths:
+    - 'metabase/**'
+    - '.github/workflows/deploy-aws-eb-metabase.yml'
+
+env:
+  ENV_NAME: ${{ github.ref == 'refs/heads/main' && 'prod' || github.ref == 'refs/heads/develop' && 'ninja' }}
+  AWS_REGION: us-east-2
+  EB_APP_NAME: Metabase-env-1
+
+permissions:
+  id-token: write
+  contents: read  
+
+jobs:
+  deploy-metabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout metabase code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::770893956717:role/github-deploy
+          role-session-name: github-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install AWS Elastic Beanstalk CLI
+        run: pip install awsebcli
+
+      - name: Gerar zip do Dockerrun.aws.json do metabase
+        run: |
+          cd metabase
+          zip -r deploy.zip Dockerrun.aws.json
+
+      - name: Deploy to ${{ env.ENV_NAME }} environment
+        run: |
+          cd metabase
+          eb health ${{ env.EB_APP_NAME }}
