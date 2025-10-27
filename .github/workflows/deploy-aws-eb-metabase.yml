@@ -48,4 +48,4 @@ jobs:
       - name: Deploy to ${{ env.ENV_NAME }} environment
         run: |
           cd metabase
-          eb health ${{ env.EB_APP_NAME }}
+          eb deploy ${{ env.EB_APP_NAME }}
