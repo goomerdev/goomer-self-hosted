@@ -1,0 +1,19 @@
+branch-defaults:
+  default:
+    environment: Metabase-env-1
+environment-defaults:
+  Metabase-env-1:
+    branch: null
+    repository: null
+global:
+  application_name: Metabase
+  default_ec2_keyname: goomer-metabase
+  default_platform: Docker running on 64bit Amazon Linux
+  default_region: us-east-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  sc: null
+  workspace_type: Application
